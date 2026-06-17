@@ -536,6 +536,85 @@
   .match-card:hover .score-goals,
   .ko-card:hover .score-goals { display: block; }
 
+  /* ── 1. CARD LAYOUT FIX ── */
+  /* This allows the injected score badge to drop cleanly to a new line */
+  .match-card, .ko-card {
+    flex-wrap: wrap;
+  }
+
+  /* ── 2. SCORE BADGE STYLES ── */
+  .score-container {
+    width: 100%;
+    margin-top: 6px;
+  }
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .score-nums { font-size: 14px; letter-spacing: 1px; }
+  .score-status { font-size: 10px; opacity: 0.85; letter-spacing: 0.5px; }
+
+  /* ── 3. MODAL POPUP STYLES ── */
+  #score-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10, 22, 40, 0.85); backdrop-filter: blur(4px);
+    z-index: 9999; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  #score-modal-overlay.open {
+    opacity: 1; pointer-events: auto;
+  }
+  #score-modal {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px; width: 90%; max-width: 400px;
+    position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    transform: translateY(20px); transition: transform 0.3s ease;
+    text-align: center;
+  }
+  #score-modal-overlay.open #score-modal {
+    transform: translateY(0);
+  }
+  .modal-close {
+    position: absolute; top: 12px; right: 12px; background: none; border: none;
+    color: var(--dim); font-size: 20px; cursor: pointer; transition: 0.2s;
+  }
+  .modal-close:hover { color: var(--white); }
+  .modal-group-badge {
+    font-size: 11px; letter-spacing: 2px; color: var(--gold-lt);
+    text-transform: uppercase; margin-bottom: 16px; font-weight: 600;
+  }
+  .modal-teams {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+  }
+  .modal-team { flex: 1; text-align: center; }
+  .modal-team-flag { font-size: 36px; margin-bottom: 8px; }
+  .modal-team-name { font-weight: 700; font-size: 14px; color: var(--white); }
+  .modal-score-center { flex-shrink: 0; padding: 0 16px; }
+  .modal-score-ft { font-family: 'Bebas Neue', sans-serif; font-size: 40px; line-height: 1; color: var(--white); }
+  .modal-score-status {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    color: #fff; padding: 3px 8px; border-radius: 4px; margin: 6px 0;
+  }
+  .modal-ht { font-size: 12px; color: var(--dim); }
+  .modal-scorers {
+    display: flex; justify-content: space-between; text-align: left;
+    background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 16px;
+  }
+  .modal-scorers-col { flex: 1; }
+  .modal-scorers-col:last-child { text-align: right; }
+  .goal { color: var(--white); font-size: 11px; line-height: 1.6; }
+  .modal-divider { border: 0; height: 1px; background: var(--border); margin: 0 0 16px; }
+  .modal-venue { font-size: 12px; color: var(--dim); }
+  .ist-time-big {
+    display: block; font-family: 'Bebas Neue', sans-serif; font-size: 26px;
+    color: var(--gold); letter-spacing: 1px; margin-top: 6px;
+  }
+
 </style>
 </head>
 <body>
@@ -621,10 +700,11 @@
     <div class="date-label">Thursday Jun 11 ET &nbsp;→&nbsp; IST: Jun 12</div>
     <div class="cards-grid">
       <div class="match-card grp-A">
+        
         <div class="group-badge">A</div>
         <div class="teams-block">
           <div class="teams-row">Mexico <span class="vs">vs</span> South Africa</div>
-          <div class="venue-row">📍 Estadio Azteca, Mexico City</div>
+          <div class="venue-row">📍 Estadio Azteca, Mexico City
         </div>
         <div class="time-block">
           <div class="ist-time">12:30 AM</div>
@@ -642,7 +722,7 @@
           <div class="ist-time">07:30 AM</div>
           <div class="ist-date">Jun 12, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -652,10 +732,11 @@
     <div class="date-label">Friday Jun 12 ET &nbsp;→&nbsp; IST: Jun 13</div>
     <div class="cards-grid">
       <div class="match-card grp-B">
+        
         <div class="group-badge">B</div>
         <div class="teams-block">
           <div class="teams-row">Canada <span class="vs">vs</span> Bosnia &amp; Herzegovina</div>
-          <div class="venue-row">📍 BMO Field, Toronto</div>
+          <div class="venue-row">📍 BMO Field, Toronto
         </div>
         <div class="time-block">
           <div class="ist-time">12:30 AM</div>
@@ -673,7 +754,7 @@
           <div class="ist-time">06:30 AM</div>
           <div class="ist-date">Jun 13, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -683,10 +764,11 @@
     <div class="date-label">Saturday Jun 13 ET &nbsp;→&nbsp; IST: Jun 14</div>
     <div class="cards-grid">
       <div class="match-card grp-B">
+        
         <div class="group-badge">B</div>
         <div class="teams-block">
           <div class="teams-row">Qatar <span class="vs">vs</span> Switzerland</div>
-          <div class="venue-row">📍 Levi's Stadium, Santa Clara</div>
+          <div class="venue-row">📍 Levi's Stadium, Santa Clara
         </div>
         <div class="time-block">
           <div class="ist-time">12:30 AM</div>
@@ -716,7 +798,7 @@
           <div class="ist-time">06:30 AM</div>
           <div class="ist-date">Jun 14, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -726,10 +808,11 @@
     <div class="date-label">Sunday Jun 14 ET &nbsp;→&nbsp; IST: Jun 14–15</div>
     <div class="cards-grid">
       <div class="match-card grp-D">
+        
         <div class="group-badge">D</div>
         <div class="teams-block">
           <div class="teams-row">Australia <span class="vs">vs</span> Türkiye</div>
-          <div class="venue-row">📍 BC Place, Vancouver</div>
+          <div class="venue-row">📍 BC Place, Vancouver
         </div>
         <div class="time-block">
           <div class="ist-time">09:30 AM</div>
@@ -783,7 +866,7 @@
           <div class="ist-time">07:30 AM</div>
           <div class="ist-date">Jun 15, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -793,10 +876,11 @@
     <div class="date-label">Monday Jun 15 ET &nbsp;→&nbsp; IST: Jun 15–16</div>
     <div class="cards-grid">
       <div class="match-card grp-H">
+        
         <div class="group-badge">H</div>
         <div class="teams-block">
           <div class="teams-row">Spain <span class="vs">vs</span> Cape Verde</div>
-          <div class="venue-row">📍 Mercedes-Benz Stadium, Atlanta</div>
+          <div class="venue-row">📍 Mercedes-Benz Stadium, Atlanta
         </div>
         <div class="time-block">
           <div class="ist-time">09:30 PM</div>
@@ -838,7 +922,7 @@
           <div class="ist-time">06:30 AM</div>
           <div class="ist-date">Jun 16, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -848,10 +932,11 @@
     <div class="date-label">Tuesday Jun 16 ET &nbsp;→&nbsp; IST: Jun 17</div>
     <div class="cards-grid">
       <div class="match-card grp-I">
+        
         <div class="group-badge">I</div>
         <div class="teams-block">
           <div class="teams-row">France <span class="vs">vs</span> Senegal</div>
-          <div class="venue-row">📍 MetLife Stadium, NJ</div>
+          <div class="venue-row">📍 MetLife Stadium, NJ
         </div>
         <div class="time-block">
           <div class="ist-time">12:30 AM</div>
@@ -881,7 +966,7 @@
           <div class="ist-time">06:30 AM</div>
           <div class="ist-date">Jun 17, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -891,10 +976,11 @@
     <div class="date-label">Wednesday Jun 17 ET &nbsp;→&nbsp; IST: Jun 17–18</div>
     <div class="cards-grid">
       <div class="match-card grp-J">
+        
         <div class="group-badge">J</div>
         <div class="teams-block">
           <div class="teams-row">Austria <span class="vs">vs</span> Jordan</div>
-          <div class="venue-row">📍 Levi's Stadium, Santa Clara</div>
+          <div class="venue-row">📍 Levi's Stadium, Santa Clara
         </div>
         <div class="time-block">
           <div class="ist-time">09:30 AM</div>
@@ -948,7 +1034,7 @@
           <div class="ist-time">07:30 AM</div>
           <div class="ist-date">Jun 18, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -958,10 +1044,11 @@
     <div class="date-label">Thursday Jun 18 ET &nbsp;→&nbsp; IST: Jun 18–19</div>
     <div class="cards-grid">
       <div class="match-card grp-A">
+        
         <div class="group-badge">A</div>
         <div class="teams-block">
           <div class="teams-row">Czechia <span class="vs">vs</span> South Africa</div>
-          <div class="venue-row">📍 Mercedes-Benz Stadium, Atlanta</div>
+          <div class="venue-row">📍 Mercedes-Benz Stadium, Atlanta
         </div>
         <div class="time-block">
           <div class="ist-time">09:30 PM</div>
@@ -1003,7 +1090,7 @@
           <div class="ist-time">06:30 AM</div>
           <div class="ist-date">Jun 19, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1013,10 +1100,11 @@
     <div class="date-label">Friday Jun 19 ET &nbsp;→&nbsp; IST: Jun 20</div>
     <div class="cards-grid">
       <div class="match-card grp-D">
+        
         <div class="group-badge">D</div>
         <div class="teams-block">
           <div class="teams-row">USA <span class="vs">vs</span> Australia</div>
-          <div class="venue-row">📍 Lumen Field, Seattle</div>
+          <div class="venue-row">📍 Lumen Field, Seattle
         </div>
         <div class="time-block">
           <div class="ist-time">12:30 AM</div>
@@ -1058,7 +1146,7 @@
           <div class="ist-time">08:30 AM</div>
           <div class="ist-date">Jun 20, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1068,10 +1156,11 @@
     <div class="date-label">Saturday Jun 20 ET &nbsp;→&nbsp; IST: Jun 20–21</div>
     <div class="cards-grid">
       <div class="match-card grp-F">
+        
         <div class="group-badge">F</div>
         <div class="teams-block">
           <div class="teams-row">Netherlands <span class="vs">vs</span> Sweden</div>
-          <div class="venue-row">📍 NRG Stadium, Houston</div>
+          <div class="venue-row">📍 NRG Stadium, Houston
         </div>
         <div class="time-block">
           <div class="ist-time">10:30 PM</div>
@@ -1101,7 +1190,7 @@
           <div class="ist-time">05:30 AM</div>
           <div class="ist-date">Jun 21, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1111,10 +1200,11 @@
     <div class="date-label">Sunday Jun 21 ET &nbsp;→&nbsp; IST: Jun 21–22</div>
     <div class="cards-grid">
       <div class="match-card grp-F">
+        
         <div class="group-badge">F</div>
         <div class="teams-block">
           <div class="teams-row">Tunisia <span class="vs">vs</span> Japan</div>
-          <div class="venue-row">📍 Estadio BBVA, Monterrey</div>
+          <div class="venue-row">📍 Estadio BBVA, Monterrey
         </div>
         <div class="time-block">
           <div class="ist-time">09:30 AM</div>
@@ -1168,7 +1258,7 @@
           <div class="ist-time">06:30 AM</div>
           <div class="ist-date">Jun 22, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1178,10 +1268,11 @@
     <div class="date-label">Monday Jun 22 ET &nbsp;→&nbsp; IST: Jun 22–23</div>
     <div class="cards-grid">
       <div class="match-card grp-J">
+        
         <div class="group-badge">J</div>
         <div class="teams-block">
           <div class="teams-row">Argentina <span class="vs">vs</span> Austria</div>
-          <div class="venue-row">📍 AT&amp;T Stadium, Arlington</div>
+          <div class="venue-row">📍 AT&amp;T Stadium, Arlington
         </div>
         <div class="time-block">
           <div class="ist-time">10:30 PM</div>
@@ -1223,7 +1314,7 @@
           <div class="ist-time">08:30 AM</div>
           <div class="ist-date">Jun 23, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1233,10 +1324,11 @@
     <div class="date-label">Tuesday Jun 23 ET &nbsp;→&nbsp; IST: Jun 23–24</div>
     <div class="cards-grid">
       <div class="match-card grp-K">
+        
         <div class="group-badge">K</div>
         <div class="teams-block">
           <div class="teams-row">Portugal <span class="vs">vs</span> Uzbekistan</div>
-          <div class="venue-row">📍 NRG Stadium, Houston</div>
+          <div class="venue-row">📍 NRG Stadium, Houston
         </div>
         <div class="time-block">
           <div class="ist-time">10:30 PM</div>
@@ -1278,7 +1370,7 @@
           <div class="ist-time">07:30 AM</div>
           <div class="ist-date">Jun 24, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1288,10 +1380,11 @@
     <div class="date-label">Wednesday Jun 24 ET (Final Matchday – Groups A, B, C) &nbsp;→&nbsp; IST: Jun 25</div>
     <div class="cards-grid">
       <div class="match-card grp-B">
+        
         <div class="group-badge">B</div>
         <div class="teams-block">
           <div class="teams-row">Switzerland <span class="vs">vs</span> Canada</div>
-          <div class="venue-row">📍 BC Place, Vancouver</div>
+          <div class="venue-row">📍 BC Place, Vancouver
         </div>
         <div class="time-block">
           <div class="ist-time">12:30 AM</div>
@@ -1357,7 +1450,7 @@
           <div class="ist-time">06:30 AM</div>
           <div class="ist-date">Jun 25, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1367,10 +1460,11 @@
     <div class="date-label">Thursday Jun 25 ET (Final Matchday – Groups D, E, F) &nbsp;→&nbsp; IST: Jun 26</div>
     <div class="cards-grid">
       <div class="match-card grp-E">
+        
         <div class="group-badge">E</div>
         <div class="teams-block">
           <div class="teams-row">Curaçao <span class="vs">vs</span> Ivory Coast</div>
-          <div class="venue-row">📍 Lincoln Financial, Philadelphia</div>
+          <div class="venue-row">📍 Lincoln Financial, Philadelphia
         </div>
         <div class="time-block">
           <div class="ist-time">01:30 AM</div>
@@ -1436,7 +1530,7 @@
           <div class="ist-time">07:30 AM</div>
           <div class="ist-date">Jun 26, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1446,10 +1540,11 @@
     <div class="date-label">Friday Jun 26 ET (Final Matchday – Groups G, H, I) &nbsp;→&nbsp; IST: Jun 27</div>
     <div class="cards-grid">
       <div class="match-card grp-I">
+        
         <div class="group-badge">I</div>
         <div class="teams-block">
           <div class="teams-row">Norway <span class="vs">vs</span> France</div>
-          <div class="venue-row">📍 Gillette Stadium, Foxborough</div>
+          <div class="venue-row">📍 Gillette Stadium, Foxborough
         </div>
         <div class="time-block">
           <div class="ist-time">12:30 AM</div>
@@ -1515,7 +1610,7 @@
           <div class="ist-time">08:30 AM</div>
           <div class="ist-date">Jun 27, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1525,10 +1620,11 @@
     <div class="date-label">Saturday Jun 27 ET (Final Matchday – Groups J, K, L) &nbsp;→&nbsp; IST: Jun 28</div>
     <div class="cards-grid">
       <div class="match-card grp-L">
+        
         <div class="group-badge">L</div>
         <div class="teams-block">
           <div class="teams-row">Panama <span class="vs">vs</span> England</div>
-          <div class="venue-row">📍 MetLife Stadium, NJ</div>
+          <div class="venue-row">📍 MetLife Stadium, NJ
         </div>
         <div class="time-block">
           <div class="ist-time">02:30 AM</div>
@@ -1594,7 +1690,7 @@
           <div class="ist-time">07:30 AM</div>
           <div class="ist-date">Jun 28, 2026</div>
           <div class="ist-label">IST</div>
-        </div>
+        </div></div>
       </div>
     </div>
   </div>
@@ -1613,10 +1709,11 @@
   </div>
   <div class="cards-grid">
     <div class="ko-card">
+      
       <div class="ko-num">73</div>
       <div class="teams-block">
         <div class="teams-row">Runner-up A <span class="vs">vs</span> Runner-up B</div>
-        <div class="venue-row">📍 SoFi Stadium, LA</div>
+        <div class="venue-row">📍 SoFi Stadium, LA
       </div>
       <div class="time-block">
         <div class="ist-time">12:30 AM</div>
@@ -1802,7 +1899,7 @@
         <div class="ist-time">07:00 AM</div>
         <div class="ist-date">Jul 4, 2026</div>
         <div class="ist-label">IST</div>
-      </div>
+      </div></div>
     </div>
   </div>
 </div>
@@ -1819,10 +1916,11 @@
   </div>
   <div class="cards-grid">
     <div class="ko-card">
+      
       <div class="ko-num">90</div>
       <div class="teams-block">
         <div class="teams-row">W73 <span class="vs">vs</span> W75</div>
-        <div class="venue-row">📍 NRG Stadium, Houston &nbsp;·&nbsp; Sat Jul 4 1:00 PM ET</div>
+        <div class="venue-row">📍 NRG Stadium, Houston &nbsp;·&nbsp; Sat Jul 4 1:00 PM ET
       </div>
       <div class="time-block">
         <div class="ist-time">10:30 PM</div>
@@ -1912,7 +2010,7 @@
         <div class="ist-time">05:30 AM</div>
         <div class="ist-date">Jul 8, 2026</div>
         <div class="ist-label">IST</div>
-      </div>
+      </div></div>
     </div>
   </div>
 </div>
@@ -1929,10 +2027,11 @@
   </div>
   <div class="cards-grid">
     <div class="ko-card">
+      
       <div class="ko-num">97</div>
       <div class="teams-block">
         <div class="teams-row">W89 <span class="vs">vs</span> W90</div>
-        <div class="venue-row">📍 MetLife Stadium, NJ &nbsp;·&nbsp; Thu Jul 9 5:00 PM ET</div>
+        <div class="venue-row">📍 MetLife Stadium, NJ &nbsp;·&nbsp; Thu Jul 9 5:00 PM ET
       </div>
       <div class="time-block">
         <div class="ist-time">02:30 AM</div>
@@ -1974,7 +2073,7 @@
         <div class="ist-time">02:30 AM</div>
         <div class="ist-date">Jul 12, 2026</div>
         <div class="ist-label">IST</div>
-      </div>
+      </div></div>
     </div>
   </div>
 </div>
@@ -1991,10 +2090,11 @@
   </div>
   <div class="cards-grid">
     <div class="ko-card">
+      
       <div class="ko-num">101</div>
       <div class="teams-block">
         <div class="teams-row">W97 <span class="vs">vs</span> W98</div>
-        <div class="venue-row">📍 MetLife Stadium, NJ &nbsp;·&nbsp; Tue Jul 14 7:00 PM ET</div>
+        <div class="venue-row">📍 MetLife Stadium, NJ &nbsp;·&nbsp; Tue Jul 14 7:00 PM ET
       </div>
       <div class="time-block">
         <div class="ist-time">04:30 AM</div>
@@ -2012,7 +2112,7 @@
         <div class="ist-time">04:30 AM</div>
         <div class="ist-date">Jul 16, 2026</div>
         <div class="ist-label">IST</div>
-      </div>
+      </div></div>
     </div>
   </div>
 </div>
@@ -2027,15 +2127,16 @@
     </div>
   </div>
   <div class="ko-card">
+      
     <div class="ko-num">103</div>
     <div class="teams-block">
       <div class="teams-row">Loser SF1 <span class="vs">vs</span> Loser SF2</div>
-      <div class="venue-row">📍 Hard Rock Stadium, Miami Gardens</div>
+      <div class="venue-row">📍 Hard Rock Stadium, Miami Gardens
     </div>
     <div class="time-block">
       <div class="ist-time">04:30 AM</div>
       <div class="ist-date">Jul 19, 2026</div>
-      <div class="ist-label">IST</div>
+      <div class="ist-label">IST</div></div>
     </div>
   </div>
 </div>
@@ -2072,6 +2173,26 @@
 
 
 <script>
+// ── DOM REPAIR SCRIPT ──
+// Run this immediately to fix unclosed HTML tags
+function repairCardNesting() {
+  document.querySelectorAll('.match-card, .ko-card').forEach(card => {
+    // 1. Pull nested cards out so they become siblings in the grid
+    const nestedCards = card.querySelectorAll('.match-card, .ko-card');
+    nestedCards.forEach(nested => card.parentNode.insertBefore(nested, card.nextSibling));
+
+    // 2. Rescue the time-block that got trapped inside the teams-block
+    const teamsBlock = card.querySelector('.teams-block');
+    if (teamsBlock) {
+      const trappedTime = teamsBlock.querySelector('.time-block');
+      if (trappedTime) {
+        card.appendChild(trappedTime); // Moves it back to be a direct child of the card
+      }
+    }
+  });
+}
+repairCardNesting();
+
 const FIXTURES = [
   {start: new Date(2026,5,12,0,30), label: 'Mexico vs South Africa'},
   {start: new Date(2026,5,12,7,30), label: 'South Korea vs Czechia'},
@@ -2328,134 +2449,287 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  SCORE ENGINE — openfootball/worldcup.json
-//  Source : raw.githubusercontent.com (CORS *, no key, CDN-cached)
-//  Updated: within hours of each match ending
-//  Refresh : every 2 minutes — ?t=timestamp busts cache without
-//            triggering a CORS preflight OPTIONS request
+//  SCORE ENGINE + FLAGS + MODAL
 // ══════════════════════════════════════════════════════════════
 
-var API_URL = 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
-var REFRESH_MS = 2 * 60 * 1000;   // 2 minutes
+var API_URL    = 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
+var REFRESH_MS = 2 * 60 * 1000;
+var LOOKUP     = {};
+var CARDS_META = []; // [{label, team1, team2, ist, venue, group}]
 
-// ── Name normalisation ────────────────────────────────────────
-var NAME_MAP = { 'czech republic': 'czechia', 'turkey': 'türkiye' };
-function norm(n) { var l = (n || '').toLowerCase().trim(); return NAME_MAP[l] || l; }
+// ── FLAGS ─────────────────────────────────────────────────────
+var FLAGS = {
+  'Mexico':'🇲🇽','South Africa':'🇿🇦','South Korea':'🇰🇷','Czechia':'🇨🇿',
+  'Czech Republic':'🇨🇿','Canada':'🇨🇦','Bosnia & Herzegovina':'🇧🇦',
+  'USA':'🇺🇸','Paraguay':'🇵🇾','Qatar':'🇶🇦','Switzerland':'🇨🇭',
+  'Brazil':'🇧🇷','Morocco':'🇲🇦','Haiti':'🇭🇹','Scotland':'🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+  'Australia':'🇦🇺','Türkiye':'🇹🇷','Turkey':'🇹🇷','Germany':'🇩🇪',
+  'Curaçao':'🇨🇼','Netherlands':'🇳🇱','Japan':'🇯🇵','Ivory Coast':'🇨🇮',
+  'Ecuador':'🇪🇨','Sweden':'🇸🇪','Tunisia':'🇹🇳','Spain':'🇪🇸',
+  'Cape Verde':'🇨🇻','Belgium':'🇧🇪','Egypt':'🇪🇬','Saudi Arabia':'🇸🇦',
+  'Uruguay':'🇺🇾','Iran':'🇮🇷','New Zealand':'🇳🇿','France':'🇫🇷',
+  'Senegal':'🇸🇳','Iraq':'🇮🇶','Norway':'🇳🇴','Argentina':'🇦🇷',
+  'Algeria':'🇩🇿','Austria':'🇦🇹','Jordan':'🇯🇴','Portugal':'🇵🇹',
+  'DR Congo':'🇨🇩','England':'🏴󠁧󠁢󠁥󠁮󠁧󠁿','Croatia':'🇭🇷','Ghana':'🇬🇭',
+  'Panama':'🇵🇦','Uzbekistan':'🇺🇿','Colombia':'🇨🇴',
+};
+function getFlag(name) { return FLAGS[name] || ''; }
 
-// ── Extract team-pair key from a fixture label ─────────────────
-function labelToKey(label) {
+// ── NAME NORM ─────────────────────────────────────────────────
+var NAME_MAP = { 'czech republic':'czechia', 'turkey':'türkiye' };
+function norm(n) { var l=(n||'').toLowerCase().trim(); return NAME_MAP[l]||l; }
+
+// ── EXTRACT TEAMS FROM LABEL ──────────────────────────────────
+function splitLabel(label) {
   var cleaned = label
-    .replace(/^(R32|R16|QF|SF|3rd Place Match):\s*/i, '')
-    .replace(/^🏆\s*/, '').trim();
+    .replace(/^(R32|R16|QF|SF|3rd Place Match):\s*/i,'')
+    .replace(/^🏆\s*/,'').trim();
   var parts = cleaned.split(' vs ');
-  if (parts.length !== 2) return null;
-  return norm(parts[0]) + '|' + norm(parts[1]);
+  return parts.length === 2 ? {t1: parts[0].trim(), t2: parts[1].trim()} : null;
+}
+function labelToKey(label) {
+  var s = splitLabel(label);
+  return s ? norm(s.t1)+'|'+norm(s.t2) : null;
 }
 
-// ── Parse one openfootball match → display object ──────────────
+// ── PARSE OPENFOOTBALL MATCH ──────────────────────────────────
 function parseMatch(m) {
-  if (!m || !m.score || !m.score.ft) return null;
-  var sc = m.score, st = 'FT', s1 = sc.ft[0], s2 = sc.ft[1];
-  if (sc.pen)      { st = 'PEN'; s1 = sc.pen[0]; s2 = sc.pen[1]; }
-  else if (sc.aet) { st = 'AET'; s1 = sc.aet[0]; s2 = sc.aet[1]; }
+  if (!m||!m.score||!m.score.ft) return null;
+  var sc=m.score, st='FT', s1=sc.ft[0], s2=sc.ft[1];
+  if (sc.pen)      { st='PEN'; s1=sc.pen[0]; s2=sc.pen[1]; }
+  else if (sc.aet) { st='AET'; s1=sc.aet[0]; s2=sc.aet[1]; }
   return {
-    status:   st,
-    score1:   s1,
-    score2:   s2,
-    scorers1: (m.goals1 || []).map(function(g) { return g.name + ' ' + g.minute + "'"; }),
-    scorers2: (m.goals2 || []).map(function(g) { return g.name + ' ' + g.minute + "'"; }),
-    team1:    m.team1,
-    team2:    m.team2,
+    status:st, score1:s1, score2:s2,
+    ht: sc.ht ? sc.ht[0]+'-'+sc.ht[1] : null,
+    scorers1:(m.goals1||[]).map(function(g){return g.name+' '+g.minute+"'";}),
+    scorers2:(m.goals2||[]).map(function(g){return g.name+' '+g.minute+"'";}),
+    team1:m.team1, team2:m.team2,
   };
 }
-
-// ── Build bidirectional lookup ─────────────────────────────────
 function buildLookup(matches) {
-  var map = {};
-  for (var i = 0; i < matches.length; i++) {
-    var r = parseMatch(matches[i]);
-    if (!r) continue;
-    map[norm(r.team1) + '|' + norm(r.team2)] = r;
-    map[norm(r.team2) + '|' + norm(r.team1)] = r;
-  }
+  var map={};
+  matches.forEach(function(m){
+    var r=parseMatch(m); if(!r) return;
+    map[norm(r.team1)+'|'+norm(r.team2)]=r;
+    map[norm(r.team2)+'|'+norm(r.team1)]=r;
+  });
   return map;
 }
 
-// ── Render score badge HTML ────────────────────────────────────
-var STATUS_COLORS = { FT:'#28a745', AET:'#0d6efd', PEN:'#6f42c1', HT:'#fd7e14' };
+// ── STATUS COLORS ─────────────────────────────────────────────
+var STATUS_COLORS = {FT:'#28a745',AET:'#0d6efd',PEN:'#6f42c1',HT:'#fd7e14'};
+function scoreColor(st) { return STATUS_COLORS[st] || '#28a745'; }
 
-function renderScore(r) {
-  if (!r) return '';
-  var color = STATUS_COLORS[r.status] || '#28a745';
-  var g1 = r.scorers1.map(function(s) { return '<span>⚽ ' + s + ' (' + r.team1 + ')</span>'; }).join('<br>');
-  var g2 = r.scorers2.map(function(s) { return '<span>⚽ ' + s + ' (' + r.team2 + ')</span>'; }).join('<br>');
-  var goals = (g1 || g2)
-    ? '<div class="score-goals">' + [g1, g2].filter(Boolean).join('<br>') + '</div>'
-    : '';
-  return '<div class="score-badge" style="background:' + color + '">'
-    + '<span class="score-status">' + r.status + '</span>'
-    + '<span class="score-nums">' + r.score1 + ' \u2013 ' + r.score2 + '</span>'
-    + '</div>' + goals;
+// ── RENDER SMALL SCORE BADGE ─────────────────────────────────
+function renderScoreBadge(result) {
+  if (!result) return '';
+  var c = scoreColor(result.status);
+  return '<div class="score-badge" style="background:'+c+'">'
+    +'<span class="score-status">'+result.status+'</span>'
+    +'<span class="score-nums">'+result.score1+' \u2013 '+result.score2+'</span>'
+    +'</div>';
 }
 
-// ── Apply lookup to all cards ──────────────────────────────────
-var LOOKUP = {};
+// ── RESTRUCTURE CARD + INJECT FLAGS + SCORE ──────────────────
+function setupCard(card, idx) {
+  var fixture = FIXTURES[idx];
+  if (!fixture) return;
 
+  // Wrap existing children in .card-top if not done yet
+  if (!card.querySelector('.card-top')) {
+    var top = document.createElement('div');
+    top.className = 'card-top';
+    top.style.cssText = 'display:flex;align-items:center;gap:10px;width:100%;';
+    // Move all existing children into top
+    while (card.firstChild) top.appendChild(card.firstChild);
+    card.appendChild(top);
+  }
+
+  // Add flags to teams-row if not done yet
+  var teamsRow = card.querySelector('.teams-row');
+  if (teamsRow && !teamsRow.dataset.flagged) {
+    teamsRow.dataset.flagged = '1';
+    var teams = splitLabel(fixture.label);
+    if (teams) {
+      var f1 = getFlag(teams.t1), f2 = getFlag(teams.t2);
+      // Rebuild teams-row with flags
+      var vsSpan = teamsRow.querySelector('.vs');
+      var vsHTML = vsSpan ? vsSpan.outerHTML : '<span class="vs">vs</span>';
+      teamsRow.innerHTML =
+        (f1 ? '<span class="flag">'+f1+'</span> ' : '')
+        + teams.t1
+        + ' ' + vsHTML + ' '
+        + (f2 ? '<span class="flag">'+f2+'</span> ' : '')
+        + teams.t2;
+    }
+  }
+
+  // Inject or reuse score-container BELOW .card-top
+  var container = card.querySelector('.score-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'score-container';
+    card.appendChild(container); // appends AFTER .card-top
+  }
+
+  // Click → open modal
+  card.onclick = function() { openModal(idx); };
+}
+
+// ── APPLY ALL SCORES ─────────────────────────────────────────
 function applyScores() {
   var cards = document.querySelectorAll('.match-card, .ko-card, .final-card');
   cards.forEach(function(card) {
     var idx = parseInt(card.dataset.fixtureIndex, 10);
     if (isNaN(idx) || !FIXTURES[idx]) return;
-
+    setupCard(card, idx);
     var key    = labelToKey(FIXTURES[idx].label);
     var result = key ? LOOKUP[key] : null;
-
-    // Get or create score-container.
-    // Inject INSIDE the card, after .teams-block (present on all card types).
-    // Do NOT use .time-block — ko-card has none.
     var container = card.querySelector('.score-container');
-    if (!container) {
-      container = document.createElement('div');
-      container.className = 'score-container';
-      container.style.cssText = 'margin-top:6px; display:flex; flex-direction:column; gap:2px;';
-      var anchor = card.querySelector('.teams-block') || card.querySelector('.final-text');
-      if (anchor) {
-        anchor.insertAdjacentElement('afterend', container);
-      } else {
-        card.appendChild(container);
-      }
-    }
-
-    container.innerHTML = renderScore(result);
+    if (container) container.innerHTML = renderScoreBadge(result);
   });
 }
 
-// ── Fetch latest JSON and refresh scores ──────────────────────
-function fetchScores() {
-  // Simple GET with ?t= cache-bust — no extra headers, no preflight OPTIONS
-  fetch(API_URL + '?t=' + Date.now())
-    .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(function(data) {
-      if (!data || !Array.isArray(data.matches)) return;
-      LOOKUP = buildLookup(data.matches);
-      applyScores();
-    })
-    .catch(function() {
-      // Silently ignore — LOOKUP retains last successful data
-    });
+// ── SCORE MODAL ───────────────────────────────────────────────
+function openModal(idx) {
+  var fixture = FIXTURES[idx];
+  if (!fixture) return;
+  var label   = fixture.label;
+  var teams   = splitLabel(label);
+  var key     = labelToKey(label);
+  var result  = key ? LOOKUP[key] : null;
+
+  // Group/stage badge
+  var groupEl = document.getElementById('modal-group-badge');
+  var grpMatch = label.match(/^(R32|R16|QF|SF|3rd Place Match|🏆)/i);
+  var grpFromCard = document.querySelector('[data-fixture-index="'+idx+'"]');
+  var grpClass = grpFromCard ? (grpFromCard.className.match(/grp-([A-L])/)||[])[1] : null;
+  groupEl.textContent = grpMatch ? grpMatch[1].toUpperCase() : (grpClass ? 'Group '+grpClass : '');
+
+  // Teams & flags
+  var t1 = teams ? teams.t1 : label, t2 = teams ? teams.t2 : '';
+  document.getElementById('modal-team1-name').textContent = t1;
+  document.getElementById('modal-team2-name').textContent = t2;
+  document.getElementById('modal-team1-flag').textContent = getFlag(t1);
+  document.getElementById('modal-team2-flag').textContent = getFlag(t2);
+
+  // Score or upcoming
+  var scoreFT   = document.getElementById('modal-score-ft');
+  var scoreST   = document.getElementById('modal-score-status');
+  var scoreHT   = document.getElementById('modal-ht');
+  var scorersEl = document.getElementById('modal-scorers');
+  var upcomingEl= document.getElementById('modal-upcoming');
+
+  if (result) {
+    scoreFT.textContent = result.score1 + ' – ' + result.score2;
+    scoreST.textContent = result.status;
+    scoreST.style.background = scoreColor(result.status);
+    scoreHT.textContent = result.ht ? 'HT: '+result.ht : '';
+    upcomingEl.style.display = 'none';
+    // Scorers
+    var s1 = result.scorers1, s2 = result.scorers2;
+    if (s1.length || s2.length) {
+      scorersEl.style.display = 'flex';
+      document.getElementById('modal-scorers1').innerHTML =
+        '<strong style="color:var(--dim);font-size:9px;letter-spacing:1px;">'+t1.toUpperCase()+'</strong><br>'
+        + (s1.length ? s1.map(function(s){return '<span class="goal">⚽ '+s+'</span>';}).join('<br>') : '—');
+      document.getElementById('modal-scorers2').innerHTML =
+        '<strong style="color:var(--dim);font-size:9px;letter-spacing:1px;">'+t2.toUpperCase()+'</strong><br>'
+        + (s2.length ? s2.map(function(s){return '<span class="goal">⚽ '+s+'</span>';}).join('<br>') : '—');
+    } else {
+      scorersEl.style.display = 'none';
+    }
+  } else {
+    // Upcoming match
+    scoreFT.textContent = 'vs';
+    scoreST.textContent = '';
+    scoreST.style.background = 'transparent';
+    scoreHT.textContent = '';
+    scorersEl.style.display = 'none';
+    var istTime = (() => {
+      var tb = document.querySelector('[data-fixture-index="'+idx+'"] .ist-time');
+      var td = document.querySelector('[data-fixture-index="'+idx+'"] .ist-date');
+      return (tb ? tb.textContent : '') + (td ? '  '+td.textContent : '');
+    })();
+    upcomingEl.style.display = 'block';
+    upcomingEl.innerHTML = '<span style="color:var(--dim);font-size:10px;letter-spacing:1px;">KICK OFF (IST)</span>'
+      +'<span class="ist-time-big">'+istTime+'</span>';
+  }
+
+  // Venue
+  var venueEl = document.querySelector('[data-fixture-index="'+idx+'"] .venue-row');
+  document.getElementById('modal-venue').textContent = venueEl ? venueEl.textContent : '';
+
+  document.getElementById('score-modal-overlay').classList.add('open');
 }
 
-// ── Init ──────────────────────────────────────────────────────
+function closeModal() {
+  document.getElementById('score-modal-overlay').classList.remove('open');
+}
+
+// ── FETCH ─────────────────────────────────────────────────────
+function withTimeout(p, ms) {
+  return Promise.race([p, new Promise(function(_,r){setTimeout(function(){r(new Error('timeout'));},ms);})]);
+}
+
+function fetchScores() {
+  withTimeout(
+    fetch(API_URL+'?t='+Date.now()).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    }), 8000
+  ).then(function(data){
+    if(!data||!Array.isArray(data.matches)) return;
+    LOOKUP = buildLookup(data.matches);
+    applyScores();
+  }).catch(function(){ applyScores(); });
+}
+
+// ── INIT ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
-  // assignCardIndices() already called by the ticker script's DOMContentLoaded.
-  // Both listeners fire in order, so indices are set before fetchScores resolves.
+  // Modal close handlers
+  document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+  document.getElementById('score-modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
   fetchScores();
   setInterval(fetchScores, REFRESH_MS);
 });
 </script>
 
+
+<!-- ══ SCORE DETAIL MODAL ══ -->
+<div id="score-modal-overlay">
+  <div id="score-modal">
+    <button class="modal-close" id="modal-close-btn">✕</button>
+    <div class="modal-group-badge" id="modal-group-badge"></div>
+    <div class="modal-teams">
+      <div class="modal-team">
+        <div class="modal-team-flag" id="modal-team1-flag"></div>
+        <div class="modal-team-name" id="modal-team1-name"></div>
+      </div>
+      <div class="modal-score-center">
+        <div class="modal-score-ft" id="modal-score-ft">vs</div>
+        <div class="modal-score-status" id="modal-score-status"></div>
+        <div class="modal-ht" id="modal-ht"></div>
+      </div>
+      <div class="modal-team">
+        <div class="modal-team-flag" id="modal-team2-flag"></div>
+        <div class="modal-team-name" id="modal-team2-name"></div>
+      </div>
+    </div>
+    <div class="modal-scorers" id="modal-scorers" style="display:none">
+      <div class="modal-scorers-col" id="modal-scorers1"></div>
+      <div class="modal-scorers-col" id="modal-scorers2"></div>
+    </div>
+    <hr class="modal-divider">
+    <div class="modal-venue" id="modal-venue"></div>
+    <div class="modal-upcoming" id="modal-upcoming" style="display:none"></div>
+  </div>
+</div>
 </body>
 </html>
