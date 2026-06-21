@@ -8,17 +8,17 @@
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
 
   :root {
-    --gold:    #D4AF37;
-    --gold-lt: #F5D97A;
-    --navy:    #0A1628;
-    --navy-mid:#0F2140;
-    --navy-lt: #162D55;
-    --red:     #C8102E;
+    --gold:    #ffdd00;
+    --gold-lt: #ffe566;
+    --navy:    #001F3F;
+    --navy-mid:#002a56;
+    --navy-lt: #003366;
+    --red:     #ff4b4b;
     --green:   #00A551;
-    --white:   #F8F9FA;
-    --dim:     #8CA0BC;
-    --card-bg: #0D1E38;
-    --border:  rgba(212,175,55,0.18);
+    --white:   #f5f7fa;
+    --dim:     #F1F2F6;
+    --card-bg: #002B5B;
+    --border:  rgba(255,255,255,0.14);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,7 +32,7 @@
 
   /* ── HEADER ── */
   .header {
-    background: linear-gradient(135deg, var(--navy) 0%, #12264D 50%, var(--navy) 100%);
+    background: linear-gradient(135deg, var(--navy) 0%, #002952 50%, var(--navy) 100%);
     border-bottom: 2px solid var(--gold);
     padding: 32px 24px 24px;
     text-align: center;
@@ -42,7 +42,7 @@
   .header::before {
     content: '';
     position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08), transparent);
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,221,0,0.08), transparent);
     pointer-events: none;
   }
   .trophy-line {
@@ -57,7 +57,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(36px, 6vw, 72px);
     letter-spacing: 2px;
-    background: linear-gradient(135deg, var(--gold-lt) 0%, var(--gold) 50%, #A8872B 100%);
+    background: linear-gradient(135deg, var(--gold-lt) 0%, var(--gold) 50%, #ccaa00 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -72,7 +72,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(212,175,55,0.12);
+    background: rgba(255,221,0,0.12);
     border: 1px solid var(--border);
     border-radius: 20px;
     padding: 6px 18px;
@@ -145,7 +145,7 @@
   }
   .match-count-badge {
     margin-left: auto;
-    background: rgba(212,175,55,0.12);
+    background: rgba(255,221,0,0.12);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 3px 10px;
@@ -164,7 +164,7 @@
     letter-spacing: 2.5px;
     color: var(--dim);
     text-transform: uppercase;
-    padding: 6px 0 8px;
+    padding: 2px 10px 6px;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     margin-bottom: 8px;
   }
@@ -172,8 +172,9 @@
   /* ── MATCH CARDS GRID ── */
   .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 8px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 10px;
   }
 
   /* ── SINGLE MATCH CARD ── */
@@ -286,7 +287,7 @@
   .ist-label {
     font-size: 8.5px;
     letter-spacing: 1.5px;
-    color: rgba(212,175,55,0.5);
+    color: rgba(255,221,0,0.5);
     text-transform: uppercase;
     margin-top: 1px;
   }
@@ -294,7 +295,7 @@
   /* ── KNOCKOUT STAGE CARDS ── */
   .ko-card {
     background: var(--card-bg);
-    border: 1px solid rgba(212,175,55,0.25);
+    border: 1px solid rgba(255,221,0,0.25);
     border-radius: 10px;
     padding: 12px 14px;
     display: flex;
@@ -314,7 +315,7 @@
     width: 28px;
     height: 28px;
     border-radius: 6px;
-    background: linear-gradient(135deg, var(--gold), #A8872B);
+    background: linear-gradient(135deg, var(--gold), #ccaa00);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -323,16 +324,20 @@
     color: #000;
     flex-shrink: 0;
   }
+  
+  
 
   /* ── FINAL CARD ── */
   .final-card {
-  background: linear-gradient(135deg, #12264D 0%, #1A3660 50%, #12264D 100%);
+  background: linear-gradient(135deg, #002952 0%, #003a75 50%, #002952 100%);
   border: 2px solid var(--gold);
   border-radius: 14px;
   padding: 20px 20px;
   align-items: center;
+  display: grid;
+  grid-column: 1 / -1; 
   gap: 16px;
-  box-shadow: 0 0 40px rgba(212,175,55,0.15);
+  box-shadow: 0 0 40px rgba(255,221,0,0.15);
 }
 
   .final-icon {
@@ -400,10 +405,13 @@
     padding: 20px;
     border-top: 1px solid var(--border);
     font-size: 11px;
+    background: var(--navy);
     color: var(--dim);
     letter-spacing: 1px;
   }
 
+  @media (max-width: 1023px) { .cards-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 767px)  { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 600px) {
     .cards-grid { grid-template-columns: 1fr; }
     .header-meta { gap: 16px; }
@@ -420,7 +428,7 @@
     border-bottom: 2px solid var(--red);
     padding: 10px 20px;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(200,16,46,0.4);
+    box-shadow: 0 4px 20px rgba(255,75,75,0.4);
   }
   #live-ticker.visible { display: block; }
 
@@ -440,8 +448,8 @@
     animation: pulse-dot 1s ease-in-out infinite;
   }
   @keyframes pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(200,16,46,0.7); }
-    50% { opacity: 0.6; transform: scale(1.3); box-shadow: 0 0 0 6px rgba(200,16,46,0); }
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(255,75,75,0.7); }
+    50% { opacity: 0.6; transform: scale(1.3); box-shadow: 0 0 0 6px rgba(255,75,75,0); }
   }
 
   .live-badge {
@@ -468,7 +476,7 @@
   }
   @keyframes shimmer-text {
     0%, 100% { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-    50% { color: #FFD700; text-shadow: 0 0 20px rgba(255,215,0,0.6); }
+    50% { color: #ffdd00; text-shadow: 0 0 20px rgba(255,221,0,0.6); }
   }
 
   .live-elapsed {
@@ -482,12 +490,12 @@
   .match-card.is-live,
   .ko-card.is-live {
     border-color: var(--red) !important;
-    background: rgba(200,16,46,0.08) !important;
+    background: rgba(120, 20, 30, 0.82) !important;
     animation: card-pulse 2s ease-in-out infinite;
   }
   @keyframes card-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(200,16,46,0); border-color: rgba(200,16,46,0.9); }
-    50% { box-shadow: 0 0 16px 3px rgba(200,16,46,0.35); border-color: rgba(200,16,46,0.5); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,75,75,0); border-color: rgba(255,75,75,0.9); }
+    50% { box-shadow: 0 0 16px 3px rgba(255,75,75,0.35); border-color: rgba(255,75,75,0.5); }
   }
   .match-card.is-live .ist-time,
   .ko-card.is-live .ist-time {
@@ -516,8 +524,8 @@
   /* Today's matches highlight */
   .match-card.is-today,
   .ko-card.is-today {
-    border-color: rgba(212,175,55,0.6) !important;
-    background: rgba(212,175,55,0.05) !important;
+    border-color: rgba(255,221,0,0.6) !important;
+    background: rgba(0,31,63,0.8) !important;
   }
 
 
@@ -562,7 +570,7 @@
   /* ── 3. MODAL POPUP STYLES ── */
   #score-modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10, 22, 40, 0.85); backdrop-filter: blur(4px);
+    background: rgba(0, 31, 63, 0.85); backdrop-filter: blur(4px);
     z-index: 9999; display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
@@ -625,7 +633,7 @@
   /* ══ GSAP ANIMATION INITIAL STATES ══ */
   .header-anim-wrap { overflow: hidden; }
   .gsap-header-title { will-change: transform, opacity; }
-  .gsap-trophy { will-change: transform, opacity; display: inline-block; line-height:1; filter: drop-shadow(0 0 24px rgba(212,175,55,0.55)); }
+  .gsap-trophy { will-change: transform, opacity; display: inline-block; line-height:1; filter: drop-shadow(0 0 24px rgba(255,221,0,0.55)); }
   .gsap-fade-up { will-change: transform, opacity; }
   .stage-section { will-change: transform, opacity; }
 
@@ -652,7 +660,7 @@
 
   /* ══ SUB-BADGE FLOAT ══ */
   .sub-badge { display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(212,175,55,0.12); border: 1px solid var(--border);
+    background: rgba(255,221,0,0.12); border: 1px solid var(--border);
     border-radius: 20px; padding: 6px 18px; font-size: 12px; font-weight: 600;
     letter-spacing: 1.5px; color: var(--gold-lt); margin-top: 12px; text-transform: uppercase;
   }
@@ -687,7 +695,7 @@
 </div>
 
 <!-- ══ NEXT MATCH BANNER ══ -->
-<div id="next-match-info" style="display:none; background:rgba(212,175,55,0.07); border-bottom:1px solid rgba(212,175,55,0.2); padding:8px 20px; text-align:center;">
+<div id="next-match-info" style="display:none; background:rgba(255,221,0,0.07); border-bottom:1px solid rgba(255,221,0,0.2); padding:8px 20px; text-align:center;">
   <span style="font-size:11px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; font-weight:600;">⏳ Next Match · </span>
   <span id="next-match-label" style="font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:1px; color:var(--gold-lt);"></span>
   <span style="font-size:11px; color:var(--dim); margin-left:8px;">·</span>
@@ -702,12 +710,12 @@
       <defs>
         <linearGradient id="trophyGold" x1="0%" y1="0%" x2="80%" y2="100%">
           <stop offset="0%"   stop-color="#F5D97A"/>
-          <stop offset="45%"  stop-color="#D4AF37"/>
+          <stop offset="45%"  stop-color="#ffdd00"/>
           <stop offset="100%" stop-color="#9A7B1A"/>
         </linearGradient>
         <linearGradient id="trophyShine" x1="0%" y1="0%" x2="50%" y2="100%">
           <stop offset="0%"   stop-color="#FFFBE8" stop-opacity="0.55"/>
-          <stop offset="100%" stop-color="#D4AF37"  stop-opacity="0"/>
+          <stop offset="100%" stop-color="#ffdd00"  stop-opacity="0"/>
         </linearGradient>
         <filter id="trophyGlow">
           <feGaussianBlur stdDeviation="3" result="blur"/>
@@ -812,8 +820,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(212,175,55,0.06);
-  border: 1px solid rgba(212,175,55,0.18);
+  background: rgba(0,0,110,0.8);
+  border: 1px solid rgba(255,221,0,0.3);
   border-radius: 8px;
   padding: 10px 16px;
   margin-bottom: 24px;
@@ -2268,6 +2276,7 @@
       <div class="stage-sub">Saturday, July 18, 2026 · 7:00 PM ET</div>
     </div>
   </div>
+  <div class="cards-grid">
   <div class="ko-card">
       
     <div class="ko-num">103</div>
@@ -2292,6 +2301,7 @@
       <div class="stage-sub">Sunday, July 19, 2026 · 3:00 PM ET</div>
     </div>
   </div>
+  <div class="cards-grid">
   <div class="final-card">
     <div class="final-icon">🏆</div>
     <div class="final-text">
@@ -2304,6 +2314,7 @@
       <div class="ist-label">IST</div>
     </div>
   </div>
+  </div>
 </div>
 
 </div><!-- end wrapper -->
@@ -2313,6 +2324,7 @@
   <span>______________________________________________</span>
   <div> &#169; Sayantan Chatterjee | All Rights Reserved </div>
 </div>
+
 
 <script>
 const FIXTURES = [
@@ -2335,7 +2347,7 @@ const FIXTURES = [
   {start: new Date(2026,5,17,0,30), label: 'France vs Senegal'},
   {start: new Date(2026,5,17,3,30), label: 'Iraq vs Norway'},
   {start: new Date(2026,5,17,6,30), label: 'Argentina vs Algeria'},
-  {start: new Date(2026,6,17,9,30), label: 'Austria vs Jordan'},
+  {start: new Date(2026,5,17,9,30), label: 'Austria vs Jordan'},
   {start: new Date(2026,5,17,22,30), label: 'Portugal vs DR Congo'},
   {start: new Date(2026,5,18,1,30), label: 'England vs Croatia'},
   {start: new Date(2026,5,18,4,30), label: 'Ghana vs Panama'},
@@ -2351,7 +2363,7 @@ const FIXTURES = [
   {start: new Date(2026,5,20,22,30), label: 'Netherlands vs Sweden'},
   {start: new Date(2026,5,21,1,30), label: 'Germany vs Ivory Coast'},
   {start: new Date(2026,5,21,5,30), label: 'Ecuador vs Curaçao'},
-  {start: new Date(2026,5,21,21,30), label: 'Tunisia vs Japan'},
+  {start: new Date(2026,5,21,9,30), label: 'Tunisia vs Japan'},
   {start: new Date(2026,5,21,21,30), label: 'Spain vs Saudi Arabia'},
   {start: new Date(2026,5,22,0,30), label: 'Belgium vs Iran'},
   {start: new Date(2026,5,22,3,30), label: 'Uruguay vs Cape Verde'},
@@ -2461,9 +2473,11 @@ function getTodayMatches(now) {
   });
 }
 
-function getNextMatch(now) {
+function getNextMatches(now) {
   const upcoming = FIXTURES.filter(f => f.start > now).sort((a,b) => a.start - b.start);
-  return upcoming[0] || null;
+  if (!upcoming.length) return [];
+  const earliest = upcoming[0].start.getTime();
+  return upcoming.filter(f => f.start.getTime() === earliest);
 }
 
 function formatElapsed(startMs, nowMs) {
@@ -2560,11 +2574,12 @@ function updateTicker() {
     ticker.classList.remove('visible');
 
     // Show next match countdown
-    const next = getNextMatch(now);
-    if (next && nextEl) {
-      const diff = next.start.getTime() - now.getTime();
+    // Show next match countdown (all matches at the same kickoff time)
+    const nextGroup = getNextMatches(now);
+    if (nextGroup.length && nextEl) {
+      const diff = nextGroup[0].start.getTime() - now.getTime();
       nextEl.style.display = '';
-      nextEl.querySelector('#next-match-label').textContent = next.label;
+      nextEl.querySelector('#next-match-label').textContent = nextGroup.map(f => f.label).join('  ·  ');
       nextEl.querySelector('#next-countdown').textContent = 'Starts in ' + formatCountdown(diff);
     } else if (nextEl) {
       nextEl.style.display = 'none';
@@ -2881,48 +2896,160 @@ var canvas = document.getElementById('threejs-canvas');
 var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x000000, 0);
+renderer.setClearColor(0x001f3f, 1);
 
 var scene  = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
 camera.position.set(0, 0, 200);
+camera.lookAt(0, 0, 0);
 
 window.addEventListener('resize', function() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
+  // Rebuild the pitch backdrop so it always fills the screen
+  buildPitchBackdrop();
 });
 
-// ── STAR FIELD ──────────────────────────────────────────────
-var starGeo  = new THREE.BufferGeometry();
-var starCount = 2200;
-var starPos  = new Float32Array(starCount * 3);
-var starCol  = new Float32Array(starCount * 3);
+// ── FOOTBALL PITCH BACKDROP ──────────────────────────────────
+// A vertical plane placed behind the balls, sized to always fill
+// the entire viewport (like a background canvas).
 
-for (var i = 0; i < starCount; i++) {
-  starPos[i*3]   = (Math.random() - 0.5) * 900;
-  starPos[i*3+1] = (Math.random() - 0.5) * 900;
-  starPos[i*3+2] = (Math.random() - 0.5) * 700;
-  var pick = Math.random();
-  if (pick > 0.75) {
-    // Gold
-    starCol[i*3] = 0.83; starCol[i*3+1] = 0.69; starCol[i*3+2] = 0.22;
-  } else if (pick > 0.5) {
-    // Blue
-    starCol[i*3] = 0.20; starCol[i*3+1] = 0.60; starCol[i*3+2] = 0.86;
-  } else {
-    // White/dim
-    starCol[i*3] = 0.55; starCol[i*3+1] = 0.63; starCol[i*3+2] = 0.74;
+var pitchBackdrop = null;
+
+function makePitchTexture() {
+  // Draw at high resolution for crisp lines
+  var W = 1024, H = 1800;
+  var tc = document.createElement('canvas');
+  tc.width = W; tc.height = H;
+  var ctx = tc.getContext('2d');
+
+  // ── Alternating vertical grass stripes (portrait pitch) ──────
+  var numStripes = 8;
+  var sw = W / numStripes;
+  for (var s = 0; s < numStripes; s++) {
+    ctx.fillStyle = s % 2 === 0 ? '#1a7a30' : '#1e8c36';
+    ctx.fillRect(s * sw, 0, sw, H);
   }
-}
-starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-starGeo.setAttribute('color',    new THREE.BufferAttribute(starCol, 3));
 
-var starMat = new THREE.PointsMaterial({
-  size: 1.6, vertexColors: true, transparent: true, opacity: 0.75, sizeAttenuation: true,
-});
-var stars = new THREE.Points(starGeo, starMat);
-scene.add(stars);
+  // ── White line drawing helpers ────────────────────────────────
+  ctx.strokeStyle = 'rgba(255,255,255,0.90)';
+  ctx.lineWidth   = 5;
+  ctx.lineCap     = 'square';
+
+  function line(x1, y1, x2, y2) {
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  function box(x, y, w, h) { ctx.strokeRect(x, y, w, h); }
+  function circle(cx, cy, r) {
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+  }
+  function dot(cx, cy) {
+    ctx.fillStyle = 'rgba(255,255,255,0.90)';
+    ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Pitch margins (portrait orientation – long side is vertical)
+  var mx = 60, my = 60;               // left/top margin
+  var PW = W - mx * 2;                // pitch width  (horizontal)
+  var PH = H - my * 2;                // pitch height (vertical)
+  var cx = W / 2, cy = H / 2;        // centre
+
+  // Outer boundary
+  box(mx, my, PW, PH);
+
+  // Halfway line (horizontal across middle)
+  line(mx, cy, mx + PW, cy);
+
+  // Centre circle & spot
+  circle(cx, cy, PH * 0.10);
+  dot(cx, cy);
+
+  // ── Penalty areas (top + bottom) ─────────────────────────────
+  var paW = PW * 0.55,  paH = PH * 0.16;
+  var paX = cx - paW / 2;
+  box(paX, my,            paW, paH);   // top PA
+  box(paX, my + PH - paH, paW, paH);  // bottom PA
+
+  // ── Goal areas (top + bottom) ─────────────────────────────────
+  var gaW = PW * 0.25, gaH = PH * 0.07;
+  var gaX = cx - gaW / 2;
+  box(gaX, my,             gaW, gaH);  // top GA
+  box(gaX, my + PH - gaH,  gaW, gaH); // bottom GA
+
+  // ── Penalty spots ─────────────────────────────────────────────
+  var pSpotDist = PH * 0.12;
+  dot(cx, my + pSpotDist);             // top spot
+  dot(cx, my + PH - pSpotDist);       // bottom spot
+
+  // ── Penalty arcs ──────────────────────────────────────────────
+  var arcR = PH * 0.10;
+  // top arc (opens downward, outside the PA box)
+  ctx.beginPath();
+  ctx.arc(cx, my + pSpotDist, arcR, Math.PI * 0.18, Math.PI * 0.82);
+  ctx.stroke();
+  // bottom arc (opens upward, outside the PA box)
+  ctx.beginPath();
+  ctx.arc(cx, my + PH - pSpotDist, arcR, Math.PI * 1.18, Math.PI * 1.82);
+  ctx.stroke();
+
+  // ── Corner arcs ───────────────────────────────────────────────
+  var caR = 28;
+  ctx.beginPath(); ctx.arc(mx,      my,       caR, 0,              Math.PI * 0.5); ctx.stroke();
+  ctx.beginPath(); ctx.arc(mx + PW, my,       caR, Math.PI * 0.5,  Math.PI);       ctx.stroke();
+  ctx.beginPath(); ctx.arc(mx,      my + PH,  caR, Math.PI * 1.5,  Math.PI * 2);   ctx.stroke();
+  ctx.beginPath(); ctx.arc(mx + PW, my + PH,  caR, Math.PI,        Math.PI * 1.5); ctx.stroke();
+
+  // ── Goals (small rectangles protruding inward from each end) ──
+  var gW = PW * 0.18, gH = 32;
+  var gX = cx - gW / 2;
+  ctx.lineWidth = 4;
+  box(gX, my,            gW, gH);   // top goal (protrudes inward)
+  box(gX, my + PH - gH,  gW, gH);  // bottom goal
+
+  return new THREE.CanvasTexture(tc);
+}
+
+// Camera must be in the scene graph for camera.add() children to render
+scene.add(camera);
+
+function buildPitchBackdrop() {
+  if (pitchBackdrop) {
+    camera.remove(pitchBackdrop);
+    pitchBackdrop.geometry.dispose();
+  }
+
+  // Calculate plane size to exactly fill the FOV at dist in camera-local space
+  var dist  = 500;
+  var fovRad = (camera.fov * Math.PI) / 180;
+  var planeH = 2 * Math.tan(fovRad / 2) * dist;
+  var planeW = planeH * camera.aspect;
+
+  // 40% safety margin to guarantee no gaps on any screen ratio
+  planeW *= 1.4;
+  planeH *= 1.4;
+
+  var geo = new THREE.PlaneGeometry(planeW, planeH);
+  var mat = new THREE.MeshBasicMaterial({ map: makePitchTexture(), depthWrite: false });
+  pitchBackdrop = new THREE.Mesh(geo, mat);
+  // Place in camera-local space — always directly in front, never moves
+  pitchBackdrop.position.set(0, 0, -dist);
+  camera.add(pitchBackdrop);   // child of camera → fixed to viewport
+}
+
+buildPitchBackdrop();
+
+// ── LIGHTS (for the orbiting footballs) ──────────────────────
+var ambientLight = new THREE.AmbientLight(0x223322, 0.8);  // neutral green-grey ambient
+scene.add(ambientLight);
+
+var goldLight = new THREE.PointLight(0xffdd00, 1.8, 400);  // bright gold key light
+goldLight.position.set(100, 80, 80);
+scene.add(goldLight);
+
+var blueLight = new THREE.PointLight(0xFFFFFF, 1.0, 350);  // clean white fill (no blue clash)
+blueLight.position.set(-120, -60, 60);
+scene.add(blueLight);
 
 // ── ORBITING FOOTBALL SPHERES ────────────────────────────────
 var ballGroup = new THREE.Group();
@@ -2959,7 +3086,7 @@ function makeTriondaTexture() {
   c.lineTo(cx+R, cy-R); c.lineTo(S, 0); c.lineTo(S, cy);
   c.bezierCurveTo(cx+70, cy-5, cx+50, cy+5, cx, cy);
   c.closePath();
-  c.fillStyle = '#C8102E'; c.globalAlpha = 0.82; c.fill();
+  c.fillStyle = '#ff4b4b'; c.globalAlpha = 0.82; c.fill();
   c.restore();
 
   // — Panel 2: USA BLUE (right-bottom quadrant) —
@@ -2998,7 +3125,7 @@ function makeTriondaTexture() {
     [[cx,cy],[cx-40,cy-4],[cx-80,cy+4],[0,cy]],
   ];
   c.lineWidth = 2.8;
-  c.strokeStyle = '#D4AF37';
+  c.strokeStyle = '#ffdd00';
   c.lineCap = 'round';
   goldSeams.forEach(function(pts) {
     c.beginPath();
@@ -3010,14 +3137,14 @@ function makeTriondaTexture() {
   // — Gold center triangle / meeting point —
   var grad = c.createRadialGradient(cx,cy,0, cx,cy,18);
   grad.addColorStop(0, '#F5D97A');
-  grad.addColorStop(1, 'rgba(212,175,55,0)');
+  grad.addColorStop(1, 'rgba(255,221,0,0)');
   c.beginPath(); c.arc(cx, cy, 18, 0, Math.PI*2);
   c.fillStyle = grad; c.fill();
 
   // — National symbols (gold) —
   c.font = 'bold 28px Arial';
   c.textAlign = 'center'; c.textBaseline = 'middle';
-  c.fillStyle = '#D4AF37';
+  c.fillStyle = '#ffdd00';
   // ★ USA star - bottom right
   c.globalAlpha = 0.90;
   c.fillText('★', cx + 52, cy + 52);
@@ -3046,31 +3173,20 @@ var ballTex = makeTriondaTexture();
 
 for (var b = 0; b < BALL_COUNT; b++) {
   var radius   = 4 + Math.random() * 3;
-  var orbitR   = 55 + Math.random() * 80;
+  var orbitR   = 50 + Math.random() * 75;
+  // Keep balls above pitch (ground is at y=-40), float between y=-15 and y=30
   var orbitY   = (Math.random() - 0.5) * 70;
   var startAng = Math.random() * Math.PI * 2;
   var speed    = (0.0015 + Math.random() * 0.0025) * (Math.random() > 0.5 ? 1 : -1);
   var tilt     = (Math.random() - 0.5) * 1.2;
 
-  var geo  = new THREE.SphereGeometry(radius, 24, 18); // higher segments for smoother ball
+  var geo  = new THREE.SphereGeometry(radius, 24, 18);
   var mat  = new THREE.MeshPhongMaterial({ map: ballTex, shininess: 90, specular: 0x444444 });
   var mesh = new THREE.Mesh(geo, mat);
 
   ballGroup.add(mesh);
   ballData.push({ mesh: mesh, orbitR: orbitR, orbitY: orbitY, angle: startAng, speed: speed, tilt: tilt, selfSpin: Math.random() * 0.03 });
 }
-
-// ── LIGHTS ───────────────────────────────────────────────────
-var ambientLight = new THREE.AmbientLight(0x334466, 0.8);
-scene.add(ambientLight);
-
-var goldLight = new THREE.PointLight(0xD4AF37, 1.8, 400);
-goldLight.position.set(100, 80, 80);
-scene.add(goldLight);
-
-var blueLight = new THREE.PointLight(0x3498DB, 1.2, 350);
-blueLight.position.set(-120, -60, 60);
-scene.add(blueLight);
 
 // ── MOUSE PARALLAX ───────────────────────────────────────────
 var mouseX = 0, mouseY = 0;
@@ -3088,18 +3204,14 @@ function animate() {
   requestAnimationFrame(animate);
   var t = clock.getElapsedTime();
 
-  // Slowly drift star field
-  stars.rotation.y = t * 0.012;
-  stars.rotation.x = t * 0.005;
-
-  // Camera parallax follows mouse (smoothed)
+  // Camera gentle parallax follows mouse
   camTargetX += (mouseX * 18 - camTargetX) * 0.04;
   camTargetY += (-mouseY * 10 - camTargetY) * 0.04;
   camera.position.x = camTargetX;
   camera.position.y = camTargetY;
   camera.lookAt(0, 0, 0);
 
-  // Orbit footballs
+  // Orbit footballs above the pitch
   for (var i = 0; i < ballData.length; i++) {
     var bd = ballData[i];
     bd.angle += bd.speed;
@@ -3108,14 +3220,13 @@ function animate() {
     bd.mesh.position.y = bd.orbitY + Math.sin(t * 0.6 + i) * 8;
     bd.mesh.rotation.x += bd.selfSpin;
     bd.mesh.rotation.z += bd.selfSpin * 0.7;
-    // Fade near the edges
     var dist = Math.abs(bd.mesh.position.z + 60);
     bd.mesh.material.opacity = 1 - dist / 160;
     bd.mesh.material.transparent = true;
   }
 
-  // Pulse gold light
-  goldLight.intensity = 1.6 + Math.sin(t * 1.4) * 0.4;
+  // Pulse gold key light
+  goldLight.intensity = 1.6 + Math.sin(t * 1.4) * 0.35;
 
   renderer.render(scene, camera);
 }
@@ -3151,7 +3262,7 @@ intro.fromTo('.gsap-fade-up',
 
 // Trophy continuous float
 gsap.to('#gsap-trophy', {
-  y: -10, duration: 2.4,
+  y: -20, duration: 2.4,
   ease: 'sine.inOut', yoyo: true, repeat: -1,
 });
 
@@ -3263,7 +3374,7 @@ function addRipple(card) {
       'width:' + size + 'px;height:' + size + 'px;' +
       'left:' + (e.clientX - r.left - size/2) + 'px;' +
       'top:'  + (e.clientY - r.top  - size/2) + 'px;' +
-      'background:rgba(212,175,55,0.18);transform:scale(0);';
+      'background:rgba(255,221,0,0.18);transform:scale(0);';
     card.appendChild(span);
     gsap.to(span, {
       scale: 1, opacity: 0, duration: 0.55, ease: 'power2.out',
