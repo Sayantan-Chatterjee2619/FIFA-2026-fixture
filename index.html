@@ -2651,8 +2651,8 @@ function parseMatch(m) {
   return {
     status:st, score1:s1, score2:s2,
     ht: sc.ht ? sc.ht[0]+'-'+sc.ht[1] : null,
-    scorers1:(m.goals1||[]).map(function(g){return g.name+' '+g.minute+"'";}),
-    scorers2:(m.goals2||[]).map(function(g){return g.name+' '+g.minute+"'";}),
+    scorers1: m.goals1 || [],
+scorers2: m.goals2 || [],
     team1:m.team1, team2:m.team2,
   };
 }
@@ -2782,10 +2782,19 @@ function openModal(idx) {
       scorersEl.style.display = 'flex';
       document.getElementById('modal-scorers1').innerHTML =
         '<strong style="color:var(--dim);font-size:9px;letter-spacing:1px;">'+t1.toUpperCase()+'</strong><br>'
-        + (s1.length ? s1.map(function(s){return '<span class="goal">⚽ '+s+'</span>';}).join('<br>') : '—');
+        + (s1.length ? s1.map(function(s){
+          var name = s.name;
+          var min = s.minute ? ' ' + s.minute + '\'' : '';
+          var og = s.owngoal ? ' (OG)' : '';
+          return '<span class="goal">⚽ ' + name + min + og + '</span>';}).join('<br>') : '—');
       document.getElementById('modal-scorers2').innerHTML =
         '<strong style="color:var(--dim);font-size:9px;letter-spacing:1px;">'+t2.toUpperCase()+'</strong><br>'
-        + (s2.length ? s2.map(function(s){return '<span class="goal">⚽ '+s+'</span>';}).join('<br>') : '—');
+        + (s2.length ? s2.map(function(s){var name = s.name;
+        var min = s.minute ? ' ' + s.minute + '\'' : '';
+        var og = s.owngoal ? ' (OG)' : '';
+        
+        return '<span class="goal">⚽ ' + name + min + og + '</span>';
+    }).join('<br>') : '-');
     } else {
       scorersEl.style.display = 'none';
     }
