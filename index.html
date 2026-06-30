@@ -851,6 +851,16 @@
     display: inline-block; font-size: 10px; font-weight: 700;
     color: #fff; padding: 3px 8px; border-radius: 4px; margin: 6px 0;
   }
+  /* AET/PEN: status cell goes multi-line – remove inline-block constraint */
+  .modal-score-status.is-aet,
+  .modal-score-status.is-pen {
+    display: block;
+    background: transparent !important;
+    padding: 0;
+    line-height: 1.8;
+  }
+  .modal-score-status.is-aet span,
+  .modal-score-status.is-pen span { display: inline-block; }
   .modal-ht { font-size: 12px; color: var(--text-secondary); }
   .modal-scorers {
     display: flex; justify-content: space-between; text-align: left;
@@ -3067,14 +3077,26 @@ function labelToKey(label) {
 // ── PARSE OPENFOOTBALL MATCH ──────────────────────────────────
 function parseMatch(m) {
   if (!m||!m.score||!m.score.ft) return null;
-  var sc=m.score, st='FT', s1=sc.ft[0], s2=sc.ft[1];
-  if (sc.pen)      { st='PEN'; s1=sc.pen[0]; s2=sc.pen[1]; }
-  else if (sc.aet) { st='AET'; s1=sc.aet[0]; s2=sc.aet[1]; }
+  var sc=m.score;
+  var ft1=sc.ft[0], ft2=sc.ft[1];   // always the 90-min score
+  var st='FT', s1=ft1, s2=ft2;
+  var penScore=null;
+  if (sc.p) {
+    st='PEN';
+    // When penalties exist, main displayed score is AET (if available) or FT
+    s1 = sc.et ? sc.et[0] : ft1;
+    s2 = sc.et ? sc.et[1] : ft2;
+    penScore = {p1:sc.p[0], p2:sc.p[1]};
+  } else if (sc.et) {
+    st='ET'; s1=sc.et[0]; s2=sc.et[1];
+  }
   return {
     status:st, score1:s1, score2:s2,
+    ft1:ft1, ft2:ft2,           // 90-min score (always present)
+    penScore:penScore,           // penalty shootout {p1,p2} or null
     ht: sc.ht ? sc.ht[0]+'-'+sc.ht[1] : null,
     scorers1: m.goals1 || [],
-scorers2: m.goals2 || [],
+    scorers2: m.goals2 || [],
     team1:m.team1, team2:m.team2,
   };
 }
@@ -3092,13 +3114,108 @@ function buildLookup(matches) {
 var STATUS_COLORS = {FT:'#28a745',AET:'#0d6efd',PEN:'#6f42c1',HT:'#fd7e14'};
 function scoreColor(st) { return STATUS_COLORS[st] || '#28a745'; }
 
+// ── DETERMINE WINNER OF A KNOCKOUT MATCH ─────────────────────
+// Returns the winning team name string, or null if no result yet.
+function getWinner(result, label) {
+  if (!result) return null;
+  var cleaned = label.replace(/^(R32|R16|QF|SF|3rd Place Match):\s*/i,'').replace(/^🏆\s*/,'').trim();
+  var parts = cleaned.split(' vs ');
+  var t1name = parts[0] ? parts[0].trim() : '';
+  var t2name = parts[1] ? parts[1].trim() : '';
+  var s1, s2;
+  if (result.status === 'PEN' && result.penScore) {
+    s1 = result.penScore.p1; s2 = result.penScore.p2;
+  } else {
+    s1 = result.score1; s2 = result.score2;
+  }
+  if (s1 > s2) return t1name;
+  if (s2 > s1) return t2name;
+  return null;
+}
+
+// ── R32 → R16 AUTO-INJECTION ─────────────────────────────────
+// W73 = winner of 1st R32 match (fixture-index 72), W88 = 16th R32 match (fi 87).
+// Each R16 card's teams-row currently shows placeholders like "W73 vs W75".
+// Once R32 results are known, replace placeholders with actual team names + flags.
+function injectR16Winners(lookup) {
+  // W[n] → fixture-index: W73=fi72 … W88=fi87
+  var W_TO_FI = {};
+  for (var i = 0; i < 16; i++) { W_TO_FI['W' + (73 + i)] = 72 + i; }
+
+  // Build W-number → winner name map
+  var wMap = {};
+  for (var wKey in W_TO_FI) {
+    var fi = W_TO_FI[wKey];
+    var fixture = FIXTURES[fi];
+    if (!fixture) continue;
+    var key = labelToKey(fixture.label);
+    var result = key ? lookup[key] : null;
+    var winner = getWinner(result, fixture.label);
+    if (winner) wMap[wKey] = winner;
+  }
+
+  if (!Object.keys(wMap).length) return; // nothing resolved yet
+
+  // Update every R16 card (fixture-index 88–95)
+  for (var r16fi = 88; r16fi <= 95; r16fi++) {
+    var card = document.querySelector('[data-fixture-index="' + r16fi + '"]');
+    if (!card) continue;
+    var teamsRow = card.querySelector('.teams-row');
+    if (!teamsRow) continue;
+
+    // Parse current text to find W-placeholders (e.g. "W73 vs W75" or already resolved)
+    var raw = teamsRow.dataset.r16raw;
+    if (!raw) {
+      // First time: capture raw text before any flag injection
+      raw = teamsRow.dataset.r16raw = teamsRow.textContent.replace(/\s+/g,' ').trim();
+    }
+
+    // Match W-placeholders
+    var wPattern = /W(\d{2})/g;
+    var hasPlaceholder = wPattern.test(raw);
+    if (!hasPlaceholder) continue; // already fully resolved, skip
+
+    // Replace each W-slot with winner name (or keep placeholder if not known)
+    var resolved = raw.replace(/W(\d{2})/g, function(match) {
+      return wMap[match] || match;
+    });
+
+    // Re-check: if all placeholders resolved, flag it; then re-apply flag decorations
+    var partsR = resolved.split(/\s+vs\s+/i);
+    if (partsR.length === 2) {
+      var t1r = partsR[0].trim(), t2r = partsR[1].trim();
+      var f1r = getFlag(t1r), f2r = getFlag(t2r);
+      teamsRow.innerHTML =
+        (f1r ? '<span class="flag">'+f1r+'</span> ' : '') + t1r
+        + ' <span class="vs">vs</span> '
+        + (f2r ? '<span class="flag">'+f2r+'</span> ' : '') + t2r;
+      teamsRow.dataset.flagged = '1';
+
+      // Also update the FIXTURES label so the modal works correctly
+      if (FIXTURES[r16fi] && !/W\d{2}/.test(resolved)) {
+        FIXTURES[r16fi].label = 'R16: ' + t1r + ' vs ' + t2r;
+      }
+    }
+  }
+}
+
 // ── RENDER SMALL SCORE BADGE ─────────────────────────────────
 function renderScoreBadge(result) {
   if (!result) return '';
   var c = scoreColor(result.status);
+  var displayStatus = result.status;
+  // For PEN: show AET score on badge, mark as PEN
+  // For AET: show AET score, mark as AET
+  var scoreStr = result.score1 + ' \u2013 ' + result.score2;
+  var penSuffix = '';
+  if (result.status === 'PEN' && result.penScore) {
+    displayStatus = 'AET';
+    penSuffix = ' <span style="font-size:9px;opacity:0.9">(Pen '+result.penScore.p1+'-'+result.penScore.p2+')</span>';
+  }
   return '<div class="score-badge" style="background:'+c+'">'
-    +'<span class="score-status">'+result.status+'</span>'
-    +'<span class="score-nums">'+result.score1+' \u2013 '+result.score2+'</span>'
+    +'<span class="score-status">'+displayStatus+'</span>'
+    +'<span class="score-nums">'+scoreStr+'</span>'
+    +penSuffix
     +'</div>';
 }
 
@@ -3160,6 +3277,8 @@ function applyScores() {
     var container = card.querySelector('.score-container');
     if (container) container.innerHTML = renderScoreBadge(result);
   });
+  // Inject R32 winners into R16 placeholders
+  injectR16Winners(LOOKUP);
 }
 
 // ── SCORE MODAL ───────────────────────────────────────────────
@@ -3193,11 +3312,43 @@ function openModal(idx) {
   var upcomingEl= document.getElementById('modal-upcoming');
 
   if (result) {
+    // ── Score display ────────────────────────────────────────────
+    // Main large score: AET score if AET/PEN, else FT score
     scoreFT.textContent = result.score1 + ' – ' + result.score2;
-    scoreST.textContent = result.status;
-    scoreST.style.background = scoreColor(result.status);
-    scoreHT.textContent = result.ht ? 'HT: '+result.ht : '';
-    upcomingEl.style.display = 'none';
+
+    if (result.status === 'PEN') {
+      scoreST.className = 'modal-score-status is-pen';
+      scoreST.innerHTML =
+        '<span style="background:'+scoreColor('AET')+';color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;">AET</span>'
+        + '<br><span id="modal-pen-line" style="font-size:13px;font-weight:700;color:#a855f7;letter-spacing:0.5px;">🥅 Pen: '
+        + (result.penScore ? result.penScore.p1 + ' – ' + result.penScore.p2 : '')
+        + '</span>';
+      scoreST.style.background = 'transparent';
+      scoreST.style.padding = '0';
+      // HT line: show both HT and the 90-min FT score
+      var htParts = [];
+      if (result.ht) htParts.push('HT ' + result.ht);
+      if (result.ft1 !== result.score1 || result.ft2 !== result.score2) {
+        htParts.push('90\' ' + result.ft1 + '-' + result.ft2);
+      }
+      scoreHT.textContent = htParts.join('  ·  ');
+    } else if (result.status === 'AET') {
+      scoreST.className = 'modal-score-status is-aet';
+      scoreST.textContent = 'AET';
+      scoreST.style.background = scoreColor('AET');
+      scoreST.style.padding = '';
+      // HT line: show both HT and the 90-min FT score
+      var htPartsAet = [];
+      if (result.ht) htPartsAet.push('HT ' + result.ht);
+      if (result.ft1 !== undefined) htPartsAet.push('90\' ' + result.ft1 + '-' + result.ft2);
+      scoreHT.textContent = htPartsAet.join('  ·  ');
+    } else {
+      scoreST.className = 'modal-score-status';
+      scoreST.textContent = 'FT';
+      scoreST.style.background = scoreColor('FT');
+      scoreST.style.padding = '';
+      scoreHT.textContent = result.ht ? 'HT: ' + result.ht : '';
+    }
     // Scorers
     var s1 = result.scorers1, s2 = result.scorers2;
     if (s1.length || s2.length) {
