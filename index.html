@@ -2519,7 +2519,7 @@
     <div class="ko-card" data-fixture-index="90">
       <div class="ko-num">91</div>
       <div class="teams-block">
-        <div class="teams-row">W76 <span class="vs">vs</span> W79</div>
+        <div class="teams-row">W82 <span class="vs">vs</span> W81</div>
         <div class="venue-row">📍 MetLife Stadium, NJ &nbsp;·&nbsp; Sun Jul 5 4:00 PM ET</div>
       </div>
       <div class="time-block">
@@ -2531,7 +2531,7 @@
     <div class="ko-card" data-fixture-index="91">
       <div class="ko-num">92</div>
       <div class="teams-block">
-        <div class="teams-row">W78 <span class="vs">vs</span> W81</div>
+        <div class="teams-row">W84 <span class="vs">vs</span> W83</div>
         <div class="venue-row">📍 SoFi Stadium, LA &nbsp;·&nbsp; Sun Jul 5 8:00 PM ET</div>
       </div>
       <div class="time-block">
@@ -2543,7 +2543,7 @@
     <div class="ko-card" data-fixture-index="92">
       <div class="ko-num">93</div>
       <div class="teams-block">
-        <div class="teams-row">W80 <span class="vs">vs</span> W83</div>
+        <div class="teams-row">W76 <span class="vs">vs</span> W78</div>
         <div class="venue-row">📍 AT&amp;T Stadium, Arlington &nbsp;·&nbsp; Mon Jul 6 1:00 PM ET</div>
       </div>
       <div class="time-block">
@@ -2555,7 +2555,7 @@
     <div class="ko-card" data-fixture-index="93">
       <div class="ko-num">94</div>
       <div class="teams-block">
-        <div class="teams-row">W82 <span class="vs">vs</span> W85</div>
+        <div class="teams-row">W79 <span class="vs">vs</span> W80</div>
         <div class="venue-row">📍 Arrowhead Stadium, Kansas City &nbsp;·&nbsp; Mon Jul 6 5:00 PM ET</div>
       </div>
       <div class="time-block">
@@ -2567,7 +2567,7 @@
     <div class="ko-card" data-fixture-index="94">
       <div class="ko-num">95</div>
       <div class="teams-block">
-        <div class="teams-row">W84 <span class="vs">vs</span> W87</div>
+        <div class="teams-row">W85 <span class="vs">vs</span> W87</div>
         <div class="venue-row">📍 Hard Rock Stadium, Miami &nbsp;·&nbsp; Tue Jul 7 4:00 PM ET</div>
       </div>
       <div class="time-block">
@@ -3134,13 +3134,25 @@ function getWinner(result, label) {
 }
 
 // ── R32 → R16 AUTO-INJECTION ─────────────────────────────────
-// W73 = winner of 1st R32 match (fixture-index 72), W88 = 16th R32 match (fi 87).
-// Each R16 card's teams-row currently shows placeholders like "W73 vs W75".
-// Once R32 results are known, replace placeholders with actual team names + flags.
+// W[ko-num] = winner of the R32 match whose card shows that ko-num.
+// Mapping derived from data-fixture-index vs ko-num on each R32 card:
+//   fi72→ko73  fi73→ko76  fi74→ko74  fi75→ko75
+//   fi76→ko78  fi77→ko77  fi78→ko79  fi79→ko80
+//   fi80→ko82  fi81→ko81  fi82→ko84  fi83→ko83
+//   fi84→ko85  fi85→ko88  fi86→ko86  fi87→ko87
+// R16 placeholder pairs per official FIFA bracket (image source):
+//   fi88(M90): W73 vs W75   fi89(M89): W74 vs W77
+//   fi90(M91): W82 vs W81   fi91(M92): W84 vs W83
+//   fi92(M93): W76 vs W78   fi93(M94): W79 vs W80
+//   fi94(M95): W85 vs W87   fi95(M96): W86 vs W88
 function injectR16Winners(lookup) {
-  // W[n] → fixture-index: W73=fi72 … W88=fi87
-  var W_TO_FI = {};
-  for (var i = 0; i < 16; i++) { W_TO_FI['W' + (73 + i)] = 72 + i; }
+  // W[ko-num] → fixture-index (exact card mapping — NOT sequential)
+  var W_TO_FI = {
+    'W73': 72, 'W76': 73, 'W74': 74, 'W75': 75,
+    'W78': 76, 'W77': 77, 'W79': 78, 'W80': 79,
+    'W82': 80, 'W81': 81, 'W84': 82, 'W83': 83,
+    'W85': 84, 'W88': 85, 'W86': 86, 'W87': 87
+  };
 
   // Build W-number → winner name map
   var wMap = {};
