@@ -4538,7 +4538,7 @@ mo.observe(document.body, { childList: true, subtree: true });
 
 <!-- Twemoji: renders flag emoji as images so they show correctly on Windows PCs,
      where Chrome/Edge/Firefox lack the color glyphs for Unicode flag sequences. -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@twemoji/api@16.0.1/dist/twemoji.min.js" crossorigin="anonymous"></script>
 <script>
   function renderFlags(root) {
     if (window.twemoji) {
