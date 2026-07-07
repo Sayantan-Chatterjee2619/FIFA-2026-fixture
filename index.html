@@ -3237,29 +3237,44 @@ function injectBracketWinners(lookup, wToFi, srcStart, srcCount, wOffset,
     // Skip if no W-placeholders remain in the cached raw text
     if (!/W\d{2,3}/.test(raw)) continue;
 
-    // Substitute known winners; leave unknown ones as-is
+    // Substitute known winners; mark still-unknown ones with a TBD sentinel
+    // (rather than requiring every placeholder in the card to resolve before
+    // showing anything — a known winner should appear as soon as it's known,
+    // even if its bracket-mate hasn't played yet).
+    var anyResolved = false;
     var resolved = raw.replace(/W(\d{2,3})/g, function(match) {
-      return wMap[match] || match;
+      if (wMap[match]) { anyResolved = true; return wMap[match]; }
+      return '\u0000TBD\u0000';
     });
 
-    // Only render when ALL placeholders in this card are resolved
-    if (/W\d{2,3}/.test(resolved)) continue;
+    // Nothing new to show this pass (still fully placeholder) — leave as-is
+    if (!anyResolved) continue;
 
     var parts = resolved.split(/\s+vs\s+/i);
     if (parts.length !== 2) continue;
 
-    var t1 = parts[0].trim().replace(/^(R16|QF|SF|Final):\s*/i, '');
-    var t2 = parts[1].trim();
-    var f1 = getFlag(t1), f2 = getFlag(t2);
+    var stillPending = /\u0000TBD\u0000/;
+    var t1raw = parts[0].trim().replace(/^(R16|QF|SF|Final):\s*/i, '');
+    var t2raw = parts[1].trim();
+    var t1pending = stillPending.test(t1raw);
+    var t2pending = stillPending.test(t2raw);
+    var t1 = t1pending ? 'TBD' : t1raw;
+    var t2 = t2pending ? 'TBD' : t2raw;
+    var f1 = t1pending ? '' : getFlag(t1);
+    var f2 = t2pending ? '' : getFlag(t2);
 
     teamsRow.innerHTML =
       (f1 ? '<span class="flag">' + f1 + '</span> ' : '') + t1
       + ' <span class="vs">vs</span> '
       + (f2 ? '<span class="flag">' + f2 + '</span> ' : '') + t2;
-    teamsRow.dataset.flagged = '1';
+    // Only mark "flagged" (done) once BOTH sides are resolved — while one side
+    // is still TBD we want future applyScores() passes to keep re-checking.
+    if (!t1pending && !t2pending) teamsRow.dataset.flagged = '1';
 
-    // Update FIXTURES label so the modal picks up the real team names
-    if (FIXTURES[destFi]) {
+    // Update FIXTURES label so the modal picks up the real team names —
+    // only once both sides are known, so downstream stages (SF/Final) don't
+    // try to match a "TBD" placeholder against the results lookup.
+    if (FIXTURES[destFi] && !t1pending && !t2pending) {
       FIXTURES[destFi].label = stageLabel + ': ' + t1 + ' vs ' + t2;
     }
   }
