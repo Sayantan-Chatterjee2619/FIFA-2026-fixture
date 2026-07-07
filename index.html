@@ -3108,6 +3108,26 @@ function parseMatch(m) {
     team1:m.team1, team2:m.team2,
   };
 }
+// ── ALIGN RESULT TO A GIVEN t1 ────────────────────────────────
+// LOOKUP stores the same result object under BOTH key orders
+// (team1|team2 and team2|team1), so result.team1/team2 always
+// reflect the API's own order — which may be the reverse of the
+// fixture label's t1/t2 order. Every place that renders score1/
+// score2/scorers1/scorers2/ft1/ft2 against t1/t2 must realign
+// first, or the numbers and scorer lists get swapped between teams.
+function alignResult(result, t1) {
+  if (!result) return result;
+  if (norm(result.team1) === norm(t1)) return result;
+  return {
+    status: result.status,
+    score1: result.score2, score2: result.score1,
+    ft1: result.ft2, ft2: result.ft1,
+    penScore: result.penScore ? {p1: result.penScore.p2, p2: result.penScore.p1} : null,
+    ht: result.ht ? result.ht.split('-').reverse().join('-') : result.ht,
+    scorers1: result.scorers2, scorers2: result.scorers1,
+    team1: result.team2, team2: result.team1,
+  };
+}
 function buildLookup(matches) {
   var map={};
   matches.forEach(function(m){
@@ -3387,6 +3407,8 @@ function applyScores() {
     setupCard(card, idx);
     var key    = labelToKey(FIXTURES[idx].label);
     var result = key ? LOOKUP[key] : null;
+    var teams  = splitLabel(FIXTURES[idx].label);
+    if (result && teams) result = alignResult(result, teams.t1);
     var container = card.querySelector('.score-container');
     if (container) container.innerHTML = renderScoreBadge(result);
   });
@@ -3402,6 +3424,7 @@ function openModal(idx) {
   var teams   = splitLabel(label);
   var key     = labelToKey(label);
   var result  = key ? LOOKUP[key] : null;
+  if (result && teams) result = alignResult(result, teams.t1);
 
   // Group/stage badge
   var groupEl = document.getElementById('modal-group-badge');
@@ -3535,6 +3558,25 @@ function fetchScores() {
   });
 }
 
+// ── FIX CARD ORDER ────────────────────────────────────────────
+// Cards were hardcoded in W-number / ko-num order, which is not
+// the same as actual kickoff order (e.g. R16 fi90 kicks off AFTER
+// fi91 despite being written first). Re-sort each .cards-grid's
+// children by their real FIXTURES[idx].start time, ascending.
+function sortCardsByKickoff() {
+  document.querySelectorAll('.cards-grid').forEach(function(grid) {
+    var cards = Array.prototype.slice.call(grid.children);
+    cards.sort(function(a, b) {
+      var ia = parseInt(a.dataset.fixtureIndex, 10);
+      var ib = parseInt(b.dataset.fixtureIndex, 10);
+      var fa = FIXTURES[ia], fb = FIXTURES[ib];
+      if (!fa || !fb) return 0;
+      return fa.start - fb.start;
+    });
+    cards.forEach(function(card) { grid.appendChild(card); });
+  });
+}
+
 // ── INIT ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
   // Modal close handlers
@@ -3546,6 +3588,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'Escape') closeModal();
   });
 
+  sortCardsByKickoff();
   fetchScores();
   setInterval(fetchScores, REFRESH_MS);
 });
