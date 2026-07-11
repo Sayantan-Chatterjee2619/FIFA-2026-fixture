@@ -2681,7 +2681,7 @@
         <div class="venue-row">📍 MetLife Stadium, NJ &nbsp;·&nbsp; Tue Jul 14 7:00 PM ET</div>
       </div>
       <div class="time-block">
-        <div class="ist-time">04:30 AM</div>
+        <div class="ist-time">12:30 AM</div>
         <div class="ist-date">Jul 15, 2026</div>
         <div class="ist-label">IST</div>
       </div>
@@ -2693,7 +2693,7 @@
         <div class="venue-row">📍 AT&amp;T Stadium, Arlington &nbsp;·&nbsp; Wed Jul 15 7:00 PM ET</div>
       </div>
       <div class="time-block">
-        <div class="ist-time">04:30 AM</div>
+        <div class="ist-time">12:30 AM</div>
         <div class="ist-date">Jul 16, 2026</div>
         <div class="ist-label">IST</div>
       </div></div>
@@ -2719,7 +2719,7 @@
       <div class="venue-row">📍 Hard Rock Stadium, Miami Gardens</div>
     </div>
     <div class="time-block">
-      <div class="ist-time">04:30 AM</div>
+      <div class="ist-time">02:30 AM</div>
       <div class="ist-date">Jul 19, 2026</div>
       <div class="ist-label">IST</div></div>
     </div>
@@ -2868,10 +2868,10 @@ const FIXTURES = [
   {start: new Date(1783710000000), label: 'QF: Match 98'},
   {start: new Date(1783803600000), label: 'QF: Match 99'},
   {start: new Date(1783818000000), label: 'QF: Match 100'},
-  {start: new Date(1784070000000), label: 'SF: Match 101'},
-  {start: new Date(1784156400000), label: 'SF: Match 102'},
-  {start: new Date(1784415600000), label: '3rd Place Match'},
-  {start: new Date(1784487600000), label: '🏆 FIFA WORLD CUP FINAL'},
+  {start: new Date(1784046000000), label: 'SF: Match 101'},
+  {start: new Date(1784132400000), label: 'SF: Match 102'},
+  {start: new Date(1784398800000), label: '3rd Place Match'},
+  {start: new Date(1784478000000), label: '🏆 FIFA WORLD CUP FINAL'},
 ];
 
 // Each match lasts ~105 minutes (90 min + 15 min HT + possible stoppage)
@@ -2922,9 +2922,9 @@ function getNextMatches(now) {
 
 function formatElapsed(startMs, nowMs) {
   const diffMin = Math.floor((nowMs - startMs) / 60000);
-  if (diffMin < 45) return diffMin + "' (1st Half)";
-  if (diffMin < 50) return "HT";
-  if (diffMin < 95) return (diffMin - 5) + "' (2nd Half)";
+  if (diffMin < 48) return diffMin + "' (1st Half)";
+  if (diffMin < 65) return "HT";
+  if (diffMin < 120) return (diffMin - 5) + "' (2nd Half)";
   return "Extra Time / Penalties";
 }
 
