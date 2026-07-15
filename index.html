@@ -545,6 +545,20 @@
     background-clip: text;
     line-height: 1;
   }
+  .final-text .teams-row {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold-lt);
+    letter-spacing: 0.4px;
+    margin-top: 6px;
+    white-space: normal;
+  }
+  .final-text .teams-row .vs {
+    color: var(--text-secondary);
+    font-weight: 400;
+    font-size: 11px;
+    margin: 0 6px;
+  }
   .final-text .venue {
     font-size: 11px;
     color: var(--text-secondary);
@@ -2740,6 +2754,7 @@
     <div class="final-icon">🏆</div>
     <div class="final-text">
       <div class="main">FIFA World Cup 2026™ Final</div>
+      <div class="teams-row">W101 <span class="vs">vs</span> W102</div>
       <div class="venue">📍 MetLife Stadium, East Rutherford, NJ &nbsp;|&nbsp; Match #104 &nbsp;|&nbsp; Capacity: 82,500</div>
     </div>
     <div class="final-time">
@@ -3072,7 +3087,7 @@ function norm(n) { var l=(n||'').toLowerCase().trim(); return NAME_MAP[l]||l; }
 // ── EXTRACT TEAMS FROM LABEL ──────────────────────────────────
 function splitLabel(label) {
   var cleaned = label
-    .replace(/^(R32|R16|QF|SF|3rd Place Match):\s*/i,'')
+    .replace(/^(R32|R16|QF|SF|Final|3rd Place Match):\s*/i,'')
     .replace(/^🏆\s*/,'').trim();
   var parts = cleaned.split(' vs ');
   return parts.length === 2 ? {t1: parts[0].trim(), t2: parts[1].trim()} : null;
@@ -3146,7 +3161,7 @@ function scoreColor(st) { return STATUS_COLORS[st] || '#28a745'; }
 // Returns the winning team name string, or null if no result yet.
 function getWinner(result, label) {
   if (!result) return null;
-  var cleaned = label.replace(/^(R32|R16|QF|SF|3rd Place Match):\s*/i,'').replace(/^🏆\s*/,'').trim();
+  var cleaned = label.replace(/^(R32|R16|QF|SF|Final|3rd Place Match):\s*/i,'').replace(/^🏆\s*/,'').trim();
   var parts = cleaned.split(' vs ');
   var t1name = parts[0] ? parts[0].trim() : '';
   var t2name = parts[1] ? parts[1].trim() : '';
@@ -3303,7 +3318,7 @@ function injectSFLosers(lookup) {
 
   var loser1 = getSFLoser(100); // loser of SF1
   var loser2 = getSFLoser(101); // loser of SF2
-  if (!loser1 || !loser2) return; // both SF results needed
+  if (!loser1 && !loser2) return; // nothing new to show yet
 
   var card = document.querySelector('[data-fixture-index="102"]');
   if (!card) return;
@@ -3314,20 +3329,29 @@ function injectSFLosers(lookup) {
   if (!teamsRow.dataset.trdraw) {
     teamsRow.dataset.trdraw = teamsRow.textContent.replace(/\s+/g, ' ').trim();
   }
-  // Skip if already resolved
+  // Skip only once BOTH sides are fully resolved (see below — trdraw is left
+  // as the original "Loser SF..." sentinel until both losers are known, so
+  // future applyScores() passes keep re-checking the still-pending side).
   if (!/Loser SF/i.test(teamsRow.dataset.trdraw)) return;
 
-  var f1 = getFlag(loser1), f2 = getFlag(loser2);
+  var t1 = loser1 || 'TBD';
+  var t2 = loser2 || 'TBD';
+  var f1 = loser1 ? getFlag(t1) : '';
+  var f2 = loser2 ? getFlag(t2) : '';
   teamsRow.innerHTML =
-    (f1 ? '<span class="flag">' + f1 + '</span> ' : '') + loser1
+    (f1 ? '<span class="flag">' + f1 + '</span> ' : '') + t1
     + ' <span class="vs">vs</span> '
-    + (f2 ? '<span class="flag">' + f2 + '</span> ' : '') + loser2;
-  teamsRow.dataset.flagged = '1';
-  teamsRow.dataset.trdraw  = loser1 + ' vs ' + loser2; // mark as resolved
+    + (f2 ? '<span class="flag">' + f2 + '</span> ' : '') + t2;
 
-  // Update FIXTURES label so the modal works
-  if (FIXTURES[102]) {
-    FIXTURES[102].label = '3rd Place Match: ' + loser1 + ' vs ' + loser2;
+  // Only lock in (flag as done + update FIXTURES label) once BOTH losers are
+  // known — while one side is still TBD, leave trdraw as the original
+  // "Loser SF..." sentinel so the next applyScores() pass re-checks it.
+  if (loser1 && loser2) {
+    teamsRow.dataset.flagged = '1';
+    teamsRow.dataset.trdraw  = loser1 + ' vs ' + loser2; // mark as resolved
+    if (FIXTURES[102]) {
+      FIXTURES[102].label = '3rd Place Match: ' + loser1 + ' vs ' + loser2;
+    }
   }
 }
 
@@ -3443,7 +3467,7 @@ function openModal(idx) {
 
   // Group/stage badge
   var groupEl = document.getElementById('modal-group-badge');
-  var grpMatch = label.match(/^(R32|R16|QF|SF|3rd Place Match|🏆)/i);
+  var grpMatch = label.match(/^(R32|R16|QF|SF|Final|3rd Place Match|🏆)/i);
   var grpFromCard = document.querySelector('[data-fixture-index="'+idx+'"]');
   var grpClass = grpFromCard ? (grpFromCard.className.match(/grp-([A-L])/)||[])[1] : null;
   groupEl.textContent = grpMatch ? grpMatch[1].toUpperCase() : (grpClass ? 'Group '+grpClass : '');
